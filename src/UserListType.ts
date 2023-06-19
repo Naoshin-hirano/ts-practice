@@ -8,28 +8,12 @@ export type USER_LIST_TYPE = {
     phone: string;
     hobbies: string[];
     url: string;
-    studyMinutes: number;
-    taskCode: number;
-    studyLangs: string[];
-    score: number;
-    experienceDays: number;
-    useLangs: string[];
-    availableStartCode: number;
-    availableEndCode: number;
+    studyMinutes?: number;
+    taskCode?: number;
+    studyLangs?: string[];
+    score?: number;
+    experienceDays?: number;
+    useLangs?: string[];
+    availableStartCode?: number;
+    availableEndCode?: number;
 };
-
-// export type USER_LIST_TYPE2 = {
-//     id: number;
-//     name: string;
-//     role: string;
-//     email: string;
-//     age: number;
-//     postCode: string;
-//     phone: string;
-//     hobbies: string[];
-//     url: string;
-//     studyMinutes: number;
-//     taskCode: number;
-//     studyLangs: string[];
-//     score: number;
-// };

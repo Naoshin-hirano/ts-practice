@@ -124,11 +124,15 @@ export const initialState = {
     roleCategory: [
         {
             id: 1,
-            role: "student",
+            label: "全員",
         },
         {
             id: 2,
-            role: "mentor",
+            label: "生徒のみ",
+        },
+        {
+            id: 3,
+            label: "メンターのみ",
         },
     ],
 };
