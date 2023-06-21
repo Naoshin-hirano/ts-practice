@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./App.css";
+import { Modal } from "./Components/Modal";
 import { initialState } from "./UserList";
 import { USER_LIST_TYPE } from "./UserListType";
 
@@ -14,6 +15,7 @@ function App() {
     const filteredByMentorList = userList.filter(
         (userInfo) => userInfo.role === "mentor"
     );
+    const [showModal, setShowModal] = useState(false);
     // タブの表示切り替え状態管理
     const [categoryTab, setCategoryTab] = useState(1);
     // ユーザーリスト（studentのみ）の状態管理
@@ -124,6 +126,9 @@ function App() {
                 </div>
                 <div className={categoryTab === 2 ? "show-content" : "content"}>
                     <h1>生徒</h1>
+                    <button onClick={() => setShowModal(true)}>
+                        生徒を登録
+                    </button>
                     <div>
                         <table border={1} width="500" cellPadding="0">
                             <thead>
@@ -195,6 +200,9 @@ function App() {
                 </div>
                 <div className={categoryTab === 3 ? "show-content" : "content"}>
                     <h1>メンター</h1>
+                    <button onClick={() => setShowModal(true)}>
+                        メンターを登録
+                    </button>
                     <div>
                         <table border={1} width="500" cellPadding="0">
                             <thead>
@@ -254,6 +262,7 @@ function App() {
                     </div>
                 </div>
             </div>
+            {showModal && <Modal setShowModal={setShowModal} />}
         </div>
     );
 }
