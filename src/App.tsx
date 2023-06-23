@@ -1,13 +1,17 @@
 import React, { useState } from "react";
 import "./App.css";
-import { Modal } from "./Components/Modal";
+import { MentorModal } from "./Components/mentorModal";
+import { StudentModal } from "./Components/studentModal";
+
 import { initialState } from "./UserList";
 import { USER_LIST_TYPE } from "./UserListType";
 
 function App() {
     // ユーザーリスト（全員）
-    const userList = initialState.userList;
-    // ユーザーリスト（studentのみ）
+    const [userList, setUserList] = useState<USER_LIST_TYPE[]>(
+        initialState.userList
+    );
+    // ユーザーリスト（生徒のみ）
     const filteredByStudentList = userList.filter(
         (userInfo) => userInfo.role === "student"
     );
@@ -15,7 +19,8 @@ function App() {
     const filteredByMentorList = userList.filter(
         (userInfo) => userInfo.role === "mentor"
     );
-    const [showModal, setShowModal] = useState(false);
+    const [showStudentModal, setShowStudentModal] = useState(false);
+    const [showMentorModal, setShowMentorModal] = useState(false);
     // タブの表示切り替え状態管理
     const [categoryTab, setCategoryTab] = useState(1);
     // ユーザーリスト（studentのみ）の状態管理
@@ -126,7 +131,7 @@ function App() {
                 </div>
                 <div className={categoryTab === 2 ? "show-content" : "content"}>
                     <h1>生徒</h1>
-                    <button onClick={() => setShowModal(true)}>
+                    <button onClick={() => setShowStudentModal(true)}>
                         生徒を登録
                     </button>
                     <div>
@@ -200,7 +205,7 @@ function App() {
                 </div>
                 <div className={categoryTab === 3 ? "show-content" : "content"}>
                     <h1>メンター</h1>
-                    <button onClick={() => setShowModal(true)}>
+                    <button onClick={() => setShowMentorModal(true)}>
                         メンターを登録
                     </button>
                     <div>
@@ -262,7 +267,24 @@ function App() {
                     </div>
                 </div>
             </div>
-            {showModal && <Modal setShowModal={setShowModal} />}
+            {showStudentModal && (
+                <StudentModal
+                    setShowModal={setShowStudentModal}
+                    userList={userList}
+                    setUserList={setUserList}
+                    studentList={studentList}
+                    setStudentList={setStudentList}
+                />
+            )}
+            {showMentorModal && (
+                <MentorModal
+                    setShowModal={setShowMentorModal}
+                    userList={userList}
+                    setUserList={setUserList}
+                    mentorList={mentorList}
+                    setMentorList={setMentorList}
+                />
+            )}
         </div>
     );
 }

@@ -1,7 +1,20 @@
 import React, { Dispatch, FC, SetStateAction, useState } from "react";
+import { USER_LIST_TYPE } from "../UserListType";
 
-export const Modal: FC<{ setShowModal: Dispatch<SetStateAction<boolean>> }> = ({
+type MENTOR_MODAL_TYPE = {
+    setShowModal: Dispatch<SetStateAction<boolean>>;
+    userList: USER_LIST_TYPE[];
+    setUserList: Dispatch<SetStateAction<USER_LIST_TYPE[]>>;
+    mentorList: USER_LIST_TYPE[];
+    setMentorList: Dispatch<SetStateAction<USER_LIST_TYPE[]>>;
+};
+
+export const MentorModal: FC<MENTOR_MODAL_TYPE> = ({
     setShowModal,
+    userList,
+    setUserList,
+    mentorList,
+    setMentorList,
 }) => {
     const initialValues = {
         name: "",
@@ -10,15 +23,15 @@ export const Modal: FC<{ setShowModal: Dispatch<SetStateAction<boolean>> }> = ({
         age: "",
         postCode: "",
         phone: "",
-        hobbies: [],
+        hobbies: [""],
         url: "",
-        studyMinutes: "",
-        taskCode: "",
-        studyLangs: [],
-        score: "",
+        experienceDays: "",
+        useLangs: [""],
+        availableStartCode: "",
+        availableEndCode: "",
     };
     const [formValues, setFormValues] = useState(initialValues);
-    const [studyLanguages, setStudyLanguages] = useState<string[]>([]);
+    const [useLanguages, setUseLanguages] = useState<string[]>([]);
     const [myHobbies, setMyHobbies] = useState<string[]>([]);
     const [oneLanguage, setOneLanguage] = useState<string>("");
     const [oneHobby, setOneHobby] = useState<string>("");
@@ -30,21 +43,26 @@ export const Modal: FC<{ setShowModal: Dispatch<SetStateAction<boolean>> }> = ({
         e.preventDefault();
         const newUserInfo = {
             ...formValues,
+            id: userList.length + 1,
             hobbies: [...myHobbies],
-            studyLangs: [...studyLanguages],
+            useLangs: [...useLanguages],
         };
         console.log(newUserInfo);
         // setFormErrors(validate(formValues));
         // setIsSubmit(true);
-        console.log("レンダー");
+        const newUserList = [...userList, newUserInfo];
+        const newMentorList = [...mentorList, newUserInfo];
+        setUserList(newUserList);
+        setMentorList(newMentorList);
+        setShowModal(false);
     };
 
-    const addStudyLanguages = (language: string) => {
+    const addUseLangs = (language: string) => {
         if (language === "") {
             return;
         }
-        const newItem = [...studyLanguages, language];
-        setStudyLanguages(newItem);
+        const newItem = [...useLanguages, language];
+        setUseLanguages(newItem);
         setOneLanguage("");
     };
 
@@ -172,29 +190,18 @@ export const Modal: FC<{ setShowModal: Dispatch<SetStateAction<boolean>> }> = ({
                         </div>
                         <div className="form-field">
                             <label>
-                                勉強時間:
+                                実務経験月数:
                                 <input
                                     type="text"
-                                    name="studyMinutes"
-                                    value={formValues.studyMinutes}
+                                    name="experienceDays"
+                                    value={formValues.experienceDays}
                                     onChange={(e) => handleChange(e)}
                                 />
                             </label>
                         </div>
                         <div className="form-field">
                             <label>
-                                課題番号:
-                                <input
-                                    type="text"
-                                    name="taskCode"
-                                    value={formValues.taskCode}
-                                    onChange={(e) => handleChange(e)}
-                                />
-                            </label>
-                        </div>
-                        <div className="form-field">
-                            <label>
-                                勉強中の言語:
+                                現場で使っている言語:
                                 <input
                                     type="text"
                                     name="studyLangs"
@@ -203,15 +210,13 @@ export const Modal: FC<{ setShowModal: Dispatch<SetStateAction<boolean>> }> = ({
                                 />
                                 <div
                                     className="addItemtoArray"
-                                    onClick={() =>
-                                        addStudyLanguages(oneLanguage)
-                                    }
+                                    onClick={() => addUseLangs(oneLanguage)}
                                 >
                                     追加
                                 </div>
                                 <ul>
-                                    {studyLanguages &&
-                                        studyLanguages.map((item, index) => {
+                                    {useLanguages &&
+                                        useLanguages.map((item, index) => {
                                             return <li key={index}>{item}</li>;
                                         })}
                                 </ul>
@@ -219,11 +224,22 @@ export const Modal: FC<{ setShowModal: Dispatch<SetStateAction<boolean>> }> = ({
                         </div>
                         <div className="form-field">
                             <label>
-                                ハピネススコア:
+                                担当できる課題番号初め:
                                 <input
                                     type="number"
-                                    name="score"
-                                    value={formValues.score}
+                                    name="availableStartCode"
+                                    value={formValues.availableStartCode}
+                                    onChange={(e) => handleChange(e)}
+                                />
+                            </label>
+                        </div>
+                        <div className="form-field">
+                            <label>
+                                担当できる課題番号終わり:
+                                <input
+                                    type="number"
+                                    name="availableEndCode"
+                                    value={formValues.availableEndCode}
                                     onChange={(e) => handleChange(e)}
                                 />
                             </label>
