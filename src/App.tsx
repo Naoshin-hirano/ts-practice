@@ -11,7 +11,6 @@ function App() {
     const [userList, setUserList] = useState<USER_LIST_TYPE[]>(
         initialState.userList
     );
-    const [search, setSearch] = useState("");
     // ユーザーリスト（生徒のみ）
     const filteredByStudentList = userList.filter(
         (userInfo) => userInfo.role === "student"
@@ -20,6 +19,11 @@ function App() {
     const filteredByMentorList = userList.filter(
         (userInfo) => userInfo.role === "mentor"
     );
+    // 各項目の検索の状態
+    const [hobbySearch, setHobbySearch] = useState("");
+    const [studyLangsSearch, setStudyLangsSearch] = useState("");
+    const [useLangsSearch, setUseLangsSearch] = useState("");
+    // 登録モーダルの開閉
     const [showStudentModal, setShowStudentModal] = useState<boolean>(false);
     const [showMentorModal, setShowMentorModal] = useState(false);
     // タブの表示切り替え状態管理
@@ -80,17 +84,40 @@ function App() {
                         );
                     })}
                 </ul>
-                <div className={categoryTab === 1 ? "show-content" : "content"}>
-                    <h1>全員</h1>
-                    <div className="container">
+                <div className="searchContainer">
+                    <input
+                        type="search"
+                        name="hobbySearch"
+                        placeholder="趣味で検索"
+                        value={hobbySearch}
+                        autoComplete="off"
+                        onChange={(e) => setHobbySearch(e.target.value)}
+                    />
+                    {(categoryTab === 1 || categoryTab === 2) && (
                         <input
                             type="search"
-                            name="search"
-                            placeholder="趣味で検索"
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
+                            name="studyLangsSearch"
+                            placeholder="勉強中の言語で検索"
+                            value={studyLangsSearch}
+                            autoComplete="off"
+                            onChange={(e) =>
+                                setStudyLangsSearch(e.target.value)
+                            }
                         />
-                    </div>
+                    )}
+                    {(categoryTab === 1 || categoryTab === 3) && (
+                        <input
+                            type="search"
+                            name="useLangsSearch"
+                            placeholder="現場で使っている言語で検索"
+                            value={useLangsSearch}
+                            autoComplete="off"
+                            onChange={(e) => setUseLangsSearch(e.target.value)}
+                        />
+                    )}
+                </div>
+                <div className={categoryTab === 1 ? "show-content" : "content"}>
+                    <h1>全員</h1>
                     <div>
                         <table border={1} width="500" cellPadding="0">
                             <thead>
@@ -116,9 +143,27 @@ function App() {
                             <tbody>
                                 {userList
                                     .filter((item) => {
-                                        return search.toLowerCase() === ""
+                                        return hobbySearch.toLowerCase() === ""
                                             ? item
-                                            : item.hobbies.includes(search);
+                                            : item.hobbies.includes(
+                                                  hobbySearch
+                                              );
+                                    })
+                                    .filter((item) => {
+                                        return studyLangsSearch.toLocaleLowerCase() ===
+                                            ""
+                                            ? item
+                                            : item.studyLangs?.includes(
+                                                  studyLangsSearch
+                                              );
+                                    })
+                                    .filter((item) => {
+                                        return useLangsSearch.toLocaleLowerCase() ===
+                                            ""
+                                            ? item
+                                            : item.useLangs?.includes(
+                                                  useLangsSearch
+                                              );
                                     })
                                     .map((userInfo, index) => (
                                         <tr key={index}>
@@ -196,26 +241,44 @@ function App() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {studentList.map((userInfo, index) => (
-                                    <tr key={index}>
-                                        <td>{userInfo.name}</td>
-                                        <td>{userInfo.role}</td>
-                                        <td>{userInfo.email}</td>
-                                        <td>{userInfo.age}</td>
-                                        <td>{userInfo.postCode}</td>
-                                        <td>{userInfo.phone}</td>
-                                        <td>{userInfo.hobbies}</td>
-                                        <td>{userInfo.url}</td>
-                                        <td>{userInfo.studyMinutes}</td>
-                                        <td>{userInfo.taskCode}</td>
-                                        <td>{userInfo.studyLangs}</td>
-                                        <td>{userInfo.score}</td>
-                                        <td>{userInfo.experienceDays}</td>
-                                        <td>{userInfo.useLangs}</td>
-                                        <td>{userInfo.availableStartCode}</td>
-                                        <td>{userInfo.availableEndCode}</td>
-                                    </tr>
-                                ))}
+                                {studentList
+                                    .filter((item) => {
+                                        return hobbySearch.toLowerCase() === ""
+                                            ? item
+                                            : item.hobbies.includes(
+                                                  hobbySearch
+                                              );
+                                    })
+                                    .filter((item) => {
+                                        return studyLangsSearch.toLocaleLowerCase() ===
+                                            ""
+                                            ? item
+                                            : item.studyLangs?.includes(
+                                                  studyLangsSearch
+                                              );
+                                    })
+                                    .map((userInfo, index) => (
+                                        <tr key={index}>
+                                            <td>{userInfo.name}</td>
+                                            <td>{userInfo.role}</td>
+                                            <td>{userInfo.email}</td>
+                                            <td>{userInfo.age}</td>
+                                            <td>{userInfo.postCode}</td>
+                                            <td>{userInfo.phone}</td>
+                                            <td>{userInfo.hobbies}</td>
+                                            <td>{userInfo.url}</td>
+                                            <td>{userInfo.studyMinutes}</td>
+                                            <td>{userInfo.taskCode}</td>
+                                            <td>{userInfo.studyLangs}</td>
+                                            <td>{userInfo.score}</td>
+                                            <td>{userInfo.experienceDays}</td>
+                                            <td>{userInfo.useLangs}</td>
+                                            <td>
+                                                {userInfo.availableStartCode}
+                                            </td>
+                                            <td>{userInfo.availableEndCode}</td>
+                                        </tr>
+                                    ))}
                             </tbody>
                         </table>
                     </div>
@@ -259,26 +322,44 @@ function App() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {mentorList.map((userInfo, index) => (
-                                    <tr key={index}>
-                                        <td>{userInfo.name}</td>
-                                        <td>{userInfo.role}</td>
-                                        <td>{userInfo.email}</td>
-                                        <td>{userInfo.age}</td>
-                                        <td>{userInfo.postCode}</td>
-                                        <td>{userInfo.phone}</td>
-                                        <td>{userInfo.hobbies}</td>
-                                        <td>{userInfo.url}</td>
-                                        <td>{userInfo.studyMinutes}</td>
-                                        <td>{userInfo.taskCode}</td>
-                                        <td>{userInfo.studyLangs}</td>
-                                        <td>{userInfo.score}</td>
-                                        <td>{userInfo.experienceDays}</td>
-                                        <td>{userInfo.useLangs}</td>
-                                        <td>{userInfo.availableStartCode}</td>
-                                        <td>{userInfo.availableEndCode}</td>
-                                    </tr>
-                                ))}
+                                {mentorList
+                                    .filter((item) => {
+                                        return hobbySearch.toLowerCase() === ""
+                                            ? item
+                                            : item.hobbies.includes(
+                                                  hobbySearch
+                                              );
+                                    })
+                                    .filter((item) => {
+                                        return useLangsSearch.toLocaleLowerCase() ===
+                                            ""
+                                            ? item
+                                            : item.useLangs?.includes(
+                                                  useLangsSearch
+                                              );
+                                    })
+                                    .map((userInfo, index) => (
+                                        <tr key={index}>
+                                            <td>{userInfo.name}</td>
+                                            <td>{userInfo.role}</td>
+                                            <td>{userInfo.email}</td>
+                                            <td>{userInfo.age}</td>
+                                            <td>{userInfo.postCode}</td>
+                                            <td>{userInfo.phone}</td>
+                                            <td>{userInfo.hobbies}</td>
+                                            <td>{userInfo.url}</td>
+                                            <td>{userInfo.studyMinutes}</td>
+                                            <td>{userInfo.taskCode}</td>
+                                            <td>{userInfo.studyLangs}</td>
+                                            <td>{userInfo.score}</td>
+                                            <td>{userInfo.experienceDays}</td>
+                                            <td>{userInfo.useLangs}</td>
+                                            <td>
+                                                {userInfo.availableStartCode}
+                                            </td>
+                                            <td>{userInfo.availableEndCode}</td>
+                                        </tr>
+                                    ))}
                             </tbody>
                         </table>
                     </div>
