@@ -11,6 +11,7 @@ function App() {
     const [userList, setUserList] = useState<USER_LIST_TYPE[]>(
         initialState.userList
     );
+    const [search, setSearch] = useState("");
     // ユーザーリスト（生徒のみ）
     const filteredByStudentList = userList.filter(
         (userInfo) => userInfo.role === "student"
@@ -19,7 +20,7 @@ function App() {
     const filteredByMentorList = userList.filter(
         (userInfo) => userInfo.role === "mentor"
     );
-    const [showStudentModal, setShowStudentModal] = useState(false);
+    const [showStudentModal, setShowStudentModal] = useState<boolean>(false);
     const [showMentorModal, setShowMentorModal] = useState(false);
     // タブの表示切り替え状態管理
     const [categoryTab, setCategoryTab] = useState(1);
@@ -28,9 +29,8 @@ function App() {
         filteredByStudentList
     );
     // ユーザーリスト（mentorのみ）の状態管理
-    const [mentorList, setMentorList] = useState<USER_LIST_TYPE[]>(
-        filteredByMentorList
-    );
+    const [mentorList, setMentorList] =
+        useState<USER_LIST_TYPE[]>(filteredByMentorList);
 
     // タブの表示切り替え
     const toggleCategory = (tabIndex: number) => {
@@ -82,6 +82,15 @@ function App() {
                 </ul>
                 <div className={categoryTab === 1 ? "show-content" : "content"}>
                     <h1>全員</h1>
+                    <div className="container">
+                        <input
+                            type="search"
+                            name="search"
+                            placeholder="趣味で検索"
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
+                    </div>
                     <div>
                         <table border={1} width="500" cellPadding="0">
                             <thead>
@@ -105,26 +114,34 @@ function App() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {userList.map((userInfo, index) => (
-                                    <tr key={index}>
-                                        <td>{userInfo.name}</td>
-                                        <td>{userInfo.role}</td>
-                                        <td>{userInfo.email}</td>
-                                        <td>{userInfo.age}</td>
-                                        <td>{userInfo.postCode}</td>
-                                        <td>{userInfo.phone}</td>
-                                        <td>{userInfo.hobbies}</td>
-                                        <td>{userInfo.url}</td>
-                                        <td>{userInfo.studyMinutes}</td>
-                                        <td>{userInfo.taskCode}</td>
-                                        <td>{userInfo.studyLangs}</td>
-                                        <td>{userInfo.score}</td>
-                                        <td>{userInfo.experienceDays}</td>
-                                        <td>{userInfo.useLangs}</td>
-                                        <td>{userInfo.availableStartCode}</td>
-                                        <td>{userInfo.availableEndCode}</td>
-                                    </tr>
-                                ))}
+                                {userList
+                                    .filter((item) => {
+                                        return search.toLowerCase() === ""
+                                            ? item
+                                            : item.hobbies.includes(search);
+                                    })
+                                    .map((userInfo, index) => (
+                                        <tr key={index}>
+                                            <td>{userInfo.name}</td>
+                                            <td>{userInfo.role}</td>
+                                            <td>{userInfo.email}</td>
+                                            <td>{userInfo.age}</td>
+                                            <td>{userInfo.postCode}</td>
+                                            <td>{userInfo.phone}</td>
+                                            <td>{userInfo.hobbies}</td>
+                                            <td>{userInfo.url}</td>
+                                            <td>{userInfo.studyMinutes}</td>
+                                            <td>{userInfo.taskCode}</td>
+                                            <td>{userInfo.studyLangs}</td>
+                                            <td>{userInfo.score}</td>
+                                            <td>{userInfo.experienceDays}</td>
+                                            <td>{userInfo.useLangs}</td>
+                                            <td>
+                                                {userInfo.availableStartCode}
+                                            </td>
+                                            <td>{userInfo.availableEndCode}</td>
+                                        </tr>
+                                    ))}
                             </tbody>
                         </table>
                     </div>
@@ -267,24 +284,22 @@ function App() {
                     </div>
                 </div>
             </div>
-            {showStudentModal && (
-                <StudentModal
-                    setShowModal={setShowStudentModal}
-                    userList={userList}
-                    setUserList={setUserList}
-                    studentList={studentList}
-                    setStudentList={setStudentList}
-                />
-            )}
-            {showMentorModal && (
-                <MentorModal
-                    setShowModal={setShowMentorModal}
-                    userList={userList}
-                    setUserList={setUserList}
-                    mentorList={mentorList}
-                    setMentorList={setMentorList}
-                />
-            )}
+            <StudentModal
+                showStudentModal={showStudentModal}
+                setShowModal={setShowStudentModal}
+                userList={userList}
+                setUserList={setUserList}
+                studentList={studentList}
+                setStudentList={setStudentList}
+            />
+            <MentorModal
+                showMentorModal={showMentorModal}
+                setShowModal={setShowMentorModal}
+                userList={userList}
+                setUserList={setUserList}
+                mentorList={mentorList}
+                setMentorList={setMentorList}
+            />
         </div>
     );
 }
