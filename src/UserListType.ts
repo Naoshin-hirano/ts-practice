@@ -1,7 +1,7 @@
 export type USER_LIST_TYPE = {
     id: number;
     name: string;
-    role: string;
+    role: "student" | "mentor";
     email: string;
     age: number | string;
     postCode: string;
@@ -17,3 +17,9 @@ export type USER_LIST_TYPE = {
     availableStartCode?: number | string;
     availableEndCode?: number | string;
 };
+
+export const CATEGORY_TYPE = {
+    ALL: 1, // 全員
+    STUDENT: 2, // 生徒
+    MENTOR: 3, // メンター
+} as const;

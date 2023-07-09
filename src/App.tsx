@@ -4,7 +4,7 @@ import { MentorModal } from "./Components/mentorModal";
 import { StudentModal } from "./Components/studentModal";
 
 import { initialState } from "./UserList";
-import { USER_LIST_TYPE } from "./UserListType";
+import { USER_LIST_TYPE, CATEGORY_TYPE } from "./UserListType";
 
 function App() {
     // ユーザーリスト（全員）
@@ -93,7 +93,8 @@ function App() {
                         autoComplete="off"
                         onChange={(e) => setHobbySearch(e.target.value)}
                     />
-                    {(categoryTab === 1 || categoryTab === 2) && (
+                    {(categoryTab === CATEGORY_TYPE.ALL ||
+                        categoryTab === CATEGORY_TYPE.STUDENT) && (
                         <input
                             type="search"
                             name="studyLangsSearch"
@@ -105,7 +106,8 @@ function App() {
                             }
                         />
                     )}
-                    {(categoryTab === 1 || categoryTab === 3) && (
+                    {(categoryTab === CATEGORY_TYPE.ALL ||
+                        categoryTab === CATEGORY_TYPE.MENTOR) && (
                         <input
                             type="search"
                             name="useLangsSearch"
@@ -116,7 +118,13 @@ function App() {
                         />
                     )}
                 </div>
-                <div className={categoryTab === 1 ? "show-content" : "content"}>
+                <div
+                    className={
+                        categoryTab === CATEGORY_TYPE.ALL
+                            ? "show-content"
+                            : "content"
+                    }
+                >
                     <h1>全員</h1>
                     <div>
                         <table border={1} width="500" cellPadding="0">
@@ -191,7 +199,13 @@ function App() {
                         </table>
                     </div>
                 </div>
-                <div className={categoryTab === 2 ? "show-content" : "content"}>
+                <div
+                    className={
+                        categoryTab === CATEGORY_TYPE.STUDENT
+                            ? "show-content"
+                            : "content"
+                    }
+                >
                     <h1>生徒</h1>
                     <button onClick={() => setShowStudentModal(true)}>
                         生徒を登録
@@ -283,7 +297,13 @@ function App() {
                         </table>
                     </div>
                 </div>
-                <div className={categoryTab === 3 ? "show-content" : "content"}>
+                <div
+                    className={
+                        categoryTab === CATEGORY_TYPE.MENTOR
+                            ? "show-content"
+                            : "content"
+                    }
+                >
                     <h1>メンター</h1>
                     <button onClick={() => setShowMentorModal(true)}>
                         メンターを登録

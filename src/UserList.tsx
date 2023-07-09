@@ -1,4 +1,11 @@
-export const initialState = {
+import { USER_LIST_TYPE } from "./UserListType";
+
+type INITIAL_STATE = {
+    userList: USER_LIST_TYPE[];
+    roleCategory: { id: number; label: string }[];
+};
+
+export const initialState: INITIAL_STATE = {
     userList: [
         {
             id: 1,

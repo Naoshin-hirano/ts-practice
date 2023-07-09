@@ -49,7 +49,7 @@ export const StudentModal: FC<MODAL_TYPE> = ({
     };
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const newUserInfo = {
+        const newUserInfo: USER_LIST_TYPE = {
             ...formValues,
             id: userList.length + 1,
             role: "student",
